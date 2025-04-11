@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Style Video Playlist</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      height: 100vh;
+    }
+
+    #playlist {
+      width: 300px;
+      background: #f0f0f0;
+      border-right: 1px solid #ccc;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .video-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 5px;
+      transition: background 0.2s;
+    }
+
+    .video-item:hover {
+      background-color: #e0e0e0;
+    }
+
+    .video-item.active {
+      background-color: #d0d0d0;
+      font-weight: bold;
+    }
+
+    .thumbnail {
+      width: 100px;
+      height: 60px;
+      background-color: #ccc;
+      margin-right: 10px;
+      object-fit: cover;
+    }
+
+    .title {
+      flex: 1;
+    }
+
+    #player {
+      flex: 1;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    video {
+      width: 90%;
+      max-height: 90%;
+      background: #000;
+    }
+
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 18px;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 6px 12px;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="playlist"></div>
+
+  <div id="player">
+    <video id="videoPlayer" controls>
+      <source src="" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+    <div class="watermark">Rahul RK ©</div>
+  </div>
+
+  <script>
+    const videos = [
+      {
+        title: "Spring boot part 10",
+        src: "files/sss10.mp4",
+        thumbnail: "files/sb.jpg"
+      }
+
+
+
+
+
+
+
+
+    ];
+
+    const playlist = document.getElementById('playlist');
+    const videoPlayer = document.getElementById('videoPlayer');
+
+    let currentIndex = 0;
+
+    function playVideo(index) {
+      currentIndex = index;
+      document.querySelectorAll('.video-item').forEach(el => el.classList.remove('active'));
+      const items = document.querySelectorAll('.video-item');
+      items[index].classList.add('active');
+      videoPlayer.src = videos[index].src;
+      videoPlayer.play();
+    }
+
+    videos.forEach((video, index) => {
+      const item = document.createElement('div');
+      item.classList.add('video-item');
+
+      const img = document.createElement('img');
+      img.className = 'thumbnail';
+      img.src = video.thumbnail;
+
+      const title = document.createElement('div');
+      title.className = 'title';
+      title.textContent = video.title;
+
+      item.appendChild(img);
+      item.appendChild(title);
+
+      item.addEventListener('click', () => playVideo(index));
+
+      playlist.appendChild(item);
+
+      if (index === 0) {
+        playVideo(0);
+      }
+    });
+
+    videoPlayer.addEventListener('ended', () => {
+      if (currentIndex + 1 < videos.length) {
+        playVideo(currentIndex + 1);
+      }
+    });
+  </script>
+
+</body>
+</html>
